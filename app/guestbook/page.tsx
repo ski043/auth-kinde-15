@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { SubmitButton } from "../components/SubmitButton";
 import prisma from "../lib/db";
-import { createMessage, deleteMessage } from "../actionts";
+import { createMessage, deleteMessage } from "../actions";
 import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

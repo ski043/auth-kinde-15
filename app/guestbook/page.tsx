@@ -1,5 +1,7 @@
-import { createMessage } from "../actions";
-import { SubmitButtons } from "../component/SubmitButtons";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import React from "react";
+import { SubmitButton } from "../components/SubmitButton";
 import prisma from "../lib/db";
 
 async function getData() {
@@ -13,40 +15,37 @@ async function getData() {
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
   });
 
   return data;
 }
 
-const GuestbookPage = async () => {
+const GuestbookRoute = async () => {
   const data = await getData();
   return (
-    <div className="w-[60%] mx-auto flex items-center h-screen justify-center flex-col">
-      <form
-        className="flex justify-center w-full gap-x-5"
-        action={createMessage}
-      >
-        <input
-          className="border-2 border-black rounded-lg py-2 px-5"
-          type="text"
-          name="message"
-          placeholder="Enter your message"
-        />
-        <SubmitButtons />
-      </form>
-      <div className="mt-5">
-        {data.map((entry) => (
-          <div key={entry.id} className="flex ">
-            <p>{entry.User.firstName}: </p>
-            <p>{entry.message}</p>
+    <div className="h-screen w-screen flex items-center justify-center flex-col">
+      <Card className="w-[400px]">
+        <CardHeader>
+          <CardTitle>Guestbook Page</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form>
+            <Input name="message" placeholder="your message" required />
+            <SubmitButton />
+          </form>
+
+          <div className="mt-8">
+            {data.map((item) => (
+              <div className="flex flex-col">
+                <p>{item.User.firstName}</p>
+                <p>{item.message}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
 
-export default GuestbookPage;
+export default GuestbookRoute;

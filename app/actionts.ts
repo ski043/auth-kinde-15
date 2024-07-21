@@ -26,12 +26,15 @@ export async function deleteMessage(formData: FormData) {
   const { getUser, getPermission } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) {
+  const permission = await getPermission("delete:message");
+
+  if (permission?.isGranted) {
+    const data = await prisma.guestbookEntry.delete({
+      where: {
+        id: formData.get("messageId") as string,
+      },
+    });
+  } else {
     return redirect("/api/auth/register");
   }
-  const data = await prisma.guestbookEntry.delete({
-    where: {
-      id: formData.get("messageId") as string,
-    },
-  });
 }

@@ -3,6 +3,9 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { SubmitButton } from "../components/SubmitButton";
 import prisma from "../lib/db";
+import { createMessage, deleteMessage } from "../actionts";
+import { XIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 async function getData() {
   const data = await prisma.guestbookEntry.findMany({
@@ -29,16 +32,24 @@ const GuestbookRoute = async () => {
           <CardTitle>Guestbook Page</CardTitle>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={createMessage}>
             <Input name="message" placeholder="your message" required />
             <SubmitButton />
           </form>
 
           <div className="mt-8">
             {data.map((item) => (
-              <div className="flex flex-col">
-                <p>{item.User.firstName}</p>
-                <p>{item.message}</p>
+              <div className="w-full flex justify-between items-center">
+                <div className="flex ">
+                  <p className="mr-1">{item.User.firstName}:</p>
+                  <p>{item.message}</p>
+                </div>
+                <form action={deleteMessage}>
+                  <input type="hidden" name="messageId" value={item.id} />
+                  <Button size="icon" variant="outline">
+                    <XIcon className="w-4 h-4" />
+                  </Button>
+                </form>
               </div>
             ))}
           </div>
